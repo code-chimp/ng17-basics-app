@@ -14,4 +14,8 @@ export class ShoppingListComponent {
     new IngredientModel('Apples', 5),
     new IngredientModel('Tomatoes', 10),
   ];
+
+  handleIngredientAdded(ingredient: IngredientModel) {
+    this.ingredients.unshift(ingredient);
+  }
 }

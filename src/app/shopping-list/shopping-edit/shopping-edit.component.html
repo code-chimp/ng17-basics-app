@@ -1,14 +1,24 @@
 <div class="row">
   <div class="col-xs-12">
-    <form>
+    <form [formGroup]="ingredientForm" (ngSubmit)="handleSubmit()">
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name">Name</label>
-          <input type="text" name="name" id="name" class="form-control" />
+          <input
+            type="text"
+            name="name"
+            id="name"
+            class="form-control"
+            formControlName="name" />
         </div>
         <div class="col-sm-2 form-group">
           <label for="amount">Amount</label>
-          <input type="number" name="amount" id="amount" class="form-control" />
+          <input
+            type="number"
+            name="amount"
+            id="amount"
+            class="form-control"
+            formControlName="amount" />
         </div>
       </div>
       <div class="row">
@@ -21,4 +31,3 @@
     </form>
   </div>
 </div>
-º
