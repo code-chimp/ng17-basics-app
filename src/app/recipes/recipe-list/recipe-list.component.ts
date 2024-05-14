@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
 import RecipeModel from '../../models/recipe.model';
+import { RecipesService } from '../../services/recipes.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-list',
@@ -9,25 +11,20 @@ import RecipeModel from '../../models/recipe.model';
   templateUrl: './recipe-list.component.html',
   styleUrl: './recipe-list.component.css',
 })
-export class RecipeListComponent {
-  @Output() recipeWasSelected = new EventEmitter<RecipeModel>();
+export class RecipeListComponent implements OnInit {
+  recipes: Array<RecipeModel> = [];
 
-  recipes: Array<RecipeModel> = [
-    new RecipeModel(
-      1,
-      'First Test Recipe',
-      'This is simply a test',
-      'https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_960_720.jpg',
-    ),
-    new RecipeModel(
-      2,
-      'Second Test Recipe',
-      'This is simply another test',
-      'https://cdn.pixabay.com/photo/2016/06/15/19/09/food-1459693_960_720.jpg',
-    ),
-  ];
+  constructor(
+    private svc: RecipesService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
-  handleRecipeSelected(recipe: RecipeModel) {
-    this.recipeWasSelected.emit(recipe);
+  ngOnInit(): void {
+    this.recipes = this.svc.getRecipes();
+  }
+
+  handleNewRecipeClick() {
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 }
