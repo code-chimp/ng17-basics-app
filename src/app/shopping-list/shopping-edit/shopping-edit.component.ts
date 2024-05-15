@@ -21,7 +21,7 @@ export class ShoppingEditComponent {
   handleSubmit() {
     const { name, amount } = this.ingredientForm.value;
 
-    this.svc.ingredientAdded.emit(new IngredientModel(name, amount ? +amount : 0));
+    this.svc.ingredientsChanged.emit(new IngredientModel(name, amount ? +amount : 0));
 
     this.ingredientForm.reset();
   }
