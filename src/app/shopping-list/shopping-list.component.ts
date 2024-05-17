@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
-import IngredientModel from '../models/ingredient.model';
-import { ShoppingListService } from '../services/shopping-list.service';
 import { Subscription } from 'rxjs';
+
+import IngredientModel from '../models/ingredient.model';
+import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
+import { ShoppingListService } from '../services/shopping-list.service';
 
 @Component({
   selector: 'app-shopping-list',
   standalone: true,
   imports: [ShoppingEditComponent],
   templateUrl: './shopping-list.component.html',
-  styleUrl: './shopping-list.component.css',
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
   ingredients: Array<IngredientModel> = [];
@@ -28,5 +28,9 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  handleItemClick(index: number) {
+    this.svc.startEditing.next(index);
   }
 }

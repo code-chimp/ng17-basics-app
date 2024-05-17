@@ -11,6 +11,5 @@ import { Component } from '@angular/core';
       </div>
     </div>
   `,
-  styleUrl: './four-oh-four.component.css',
 })
 export class FourOhFourComponent {}

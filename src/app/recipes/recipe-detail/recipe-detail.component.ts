@@ -1,16 +1,16 @@
 import { Component, Input } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+
 import RecipeModel from '../../models/recipe.model';
 import { DropdownDirective } from '../../directives/dropdown.directive';
-import { ShoppingListService } from '../../services/shopping-list.service';
 import { RecipesService } from '../../services/recipes.service';
-import { RouterLink } from '@angular/router';
+import { ShoppingListService } from '../../services/shopping-list.service';
 
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
   imports: [DropdownDirective, RouterLink],
   templateUrl: './recipe-detail.component.html',
-  styleUrl: './recipe-detail.component.css',
 })
 export class RecipeDetailComponent {
   recipe: RecipeModel | null;
@@ -22,11 +22,17 @@ export class RecipeDetailComponent {
   }
 
   constructor(
-    private shoppingService: ShoppingListService,
+    private shoppingSvc: ShoppingListService,
     private recipeSvc: RecipesService,
+    private router: Router,
   ) {}
 
   handleAddToShoppingList() {
-    this.shoppingService.addIngredients(this.recipe.ingredients);
+    this.shoppingSvc.addIngredients(this.recipe.ingredients);
+  }
+
+  handleDelete() {
+    this.recipeSvc.deleteRecipe(this.currentId);
+    this.router.navigate(['/recipes']);
   }
 }
