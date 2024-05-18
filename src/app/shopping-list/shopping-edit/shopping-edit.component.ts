@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import IngredientModel from '../../models/ingredient.model';
+import { IIngredient } from '../../@interfaces/IIngredient';
 import { ShoppingListService } from '../../services/shopping-list.service';
 
 @Component({
@@ -45,9 +45,9 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     const { name, amount } = this.ingredientForm.value;
 
     if (this.editMode) {
-      this.svc.updateIngredient(this.editIndex, new IngredientModel(name, amount));
+      this.svc.updateIngredient(this.editIndex, { name, amount });
     } else {
-      this.svc.addIngredient(new IngredientModel(name, amount));
+      this.svc.addIngredient({ name, amount });
     }
 
     this.handleClearClick();

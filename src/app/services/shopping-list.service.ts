@@ -1,39 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import IngredientModel from '../models/ingredient.model';
+import { IIngredient } from '../@interfaces/IIngredient';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingListService {
-  ingredientsChanged = new Subject<Array<IngredientModel>>();
+  ingredientsChanged = new Subject<IIngredient[]>();
   startEditing = new Subject<number>();
 
-  private ingredients: Array<IngredientModel> = [
-    new IngredientModel('Apples', 5),
-    new IngredientModel('Tomatoes', 10),
+  private ingredients: IIngredient[] = [
+    { name: 'Apples', amount: 5 },
+    { name: 'Tomatoes', amount: 10 },
   ];
 
   getIngredients() {
     return this.ingredients.slice();
   }
 
-  getIngredient(index: number): IngredientModel {
+  getIngredient(index: number): IIngredient {
     return this.ingredients[index];
   }
 
-  addIngredient(ingredient: IngredientModel) {
+  addIngredient(ingredient: IIngredient) {
     this.ingredients.unshift(ingredient);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  addIngredients(ingredients: Array<IngredientModel>) {
+  addIngredients(ingredients: IIngredient[]) {
     this.ingredients.unshift(...ingredients);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  updateIngredient(index: number, ingredient: IngredientModel) {
+  updateIngredient(index: number, ingredient: IIngredient) {
     this.ingredients.splice(index, 1);
     this.ingredients.unshift(ingredient);
 

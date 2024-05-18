@@ -1,45 +1,48 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import IngredientModel from '../models/ingredient.model';
-import RecipeModel from '../models/recipe.model';
+import { IRecipe } from '../@interfaces/IRecipe';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecipesService {
-  recipesChanged = new Subject<Array<RecipeModel>>();
+  recipesChanged = new Subject<IRecipe[]>();
 
-  private recipes: Array<RecipeModel> = [
-    new RecipeModel(
-      1,
-      'Tasty Schnitzel',
-      'A super tasty schnitzel - Just awesome!',
-      'https://staticcookist.akamaized.net/wp-content/uploads/sites/22/2021/05/thumb-1200x675.jpg',
-      [new IngredientModel('Pork Cutlet', 1), new IngredientModel('Pommes Frites', 20)],
-    ),
-    new RecipeModel(
-      2,
-      'Big Fat Burger',
-      'What else needs be said?',
-      'https://www.fatbrands.com/wp-content/uploads/2023/03/fatburger-listing.jpg',
-      [
-        new IngredientModel('Buns', 2),
-        new IngredientModel('Meat', 3),
-        new IngredientModel('Cheese', 3),
+  private recipes: IRecipe[] = [
+    {
+      id: 1,
+      name: 'Tasty Schnitzel',
+      description: 'A super tasty schnitzel - Just awesome!',
+      imagePath:
+        'https://staticcookist.akamaized.net/wp-content/uploads/sites/22/2021/05/thumb-1200x675.jpg',
+      ingredients: [
+        { name: 'Pork Cutlet', amount: 1 },
+        { name: 'Pommes Frites', amount: 20 },
       ],
-    ),
+    },
+    {
+      id: 2,
+      name: 'Big Fat Burger',
+      description: 'What else needs be said?',
+      imagePath: 'https://www.fatbrands.com/wp-content/uploads/2023/03/fatburger-listing.jpg',
+      ingredients: [
+        { name: 'Buns', amount: 2 },
+        { name: 'Meat', amount: 3 },
+        { name: 'Cheese', amount: 3 },
+      ],
+    },
   ];
 
-  getRecipes() {
+  getRecipes(): IRecipe[] {
     return this.recipes.slice();
   }
 
-  getRecipe(id: number): RecipeModel | null {
+  getRecipe(id: number): IRecipe | null {
     return this.recipes.find(recipe => recipe.id === id);
   }
 
-  addRecipe(recipe: Omit<RecipeModel, 'id'>) {
+  addRecipe(recipe: Omit<IRecipe, 'id'>) {
     const id = Math.max(...this.recipes.map(r => r.id)) + 1;
 
     this.recipes.push({ id, ...recipe });
@@ -47,7 +50,7 @@ export class RecipesService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
-  updateRecipe(id: number, recipe: RecipeModel) {
+  updateRecipe(id: number, recipe: IRecipe) {
     const index = this.recipes.findIndex(r => r.id === id);
     this.recipes[index] = { ...recipe };
 

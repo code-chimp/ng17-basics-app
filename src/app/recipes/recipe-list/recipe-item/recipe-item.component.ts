@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import RecipeModel from '../../../models/recipe.model';
+
+import { IRecipe } from '../../../@interfaces/IRecipe';
 
 @Component({
   selector: 'app-recipe-item',
@@ -9,7 +10,7 @@ import RecipeModel from '../../../models/recipe.model';
   templateUrl: './recipe-item.component.html',
 })
 export class RecipeItemComponent {
-  @Input({ required: true }) recipe!: RecipeModel;
+  @Input({ required: true }) recipe!: IRecipe;
 
   constructor() {}
 }

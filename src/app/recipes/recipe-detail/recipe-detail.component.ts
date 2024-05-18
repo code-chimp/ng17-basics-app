@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
-import RecipeModel from '../../models/recipe.model';
 import { DropdownDirective } from '../../directives/dropdown.directive';
 import { RecipesService } from '../../services/recipes.service';
 import { ShoppingListService } from '../../services/shopping-list.service';
+import { IRecipe } from '../../@interfaces/IRecipe';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -13,7 +13,7 @@ import { ShoppingListService } from '../../services/shopping-list.service';
   templateUrl: './recipe-detail.component.html',
 })
 export class RecipeDetailComponent {
-  recipe: RecipeModel | null;
+  recipe: IRecipe | null;
   currentId: number;
 
   @Input() set id(id: string) {

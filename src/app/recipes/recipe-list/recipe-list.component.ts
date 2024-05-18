@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import RecipeModel from '../../models/recipe.model';
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
 import { RecipesService } from '../../services/recipes.service';
+import { IRecipe } from '../../@interfaces/IRecipe';
 
 @Component({
   selector: 'app-recipe-list',
@@ -13,7 +13,7 @@ import { RecipesService } from '../../services/recipes.service';
   templateUrl: './recipe-list.component.html',
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
-  recipes: Array<RecipeModel> = [];
+  recipes: IRecipe[] = [];
   sub: Subscription;
 
   constructor(

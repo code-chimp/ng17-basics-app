@@ -9,9 +9,9 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import IngredientModel from '../../models/ingredient.model';
-import RecipeModel from '../../models/recipe.model';
 import { RecipesService } from '../../services/recipes.service';
+import { IIngredient } from '../../@interfaces/IIngredient';
+import { IRecipe } from '../../@interfaces/IRecipe';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -29,7 +29,7 @@ export class RecipeEditComponent {
     description: new FormControl<string>(null, Validators.required),
     ingredients: new FormArray([]),
   });
-  currentRecipe: RecipeModel;
+  currentRecipe: IRecipe;
 
   constructor(
     private recipeSvc: RecipesService,
@@ -37,7 +37,7 @@ export class RecipeEditComponent {
     private route: ActivatedRoute,
   ) {}
 
-  private newIngredientGroup(ingredient?: IngredientModel) {
+  private newIngredientGroup(ingredient?: IIngredient) {
     return new FormGroup({
       name: new FormControl<string>(ingredient?.name, Validators.required),
       amount: new FormControl<number>(ingredient?.amount, [
@@ -76,9 +76,9 @@ export class RecipeEditComponent {
       this.recipeSvc.updateRecipe(this.currentId, {
         id: this.currentId,
         ...this.recipeForm.value,
-      } as RecipeModel);
+      } as IRecipe);
     } else {
-      this.recipeSvc.addRecipe(this.recipeForm.value as Omit<RecipeModel, 'id'>);
+      this.recipeSvc.addRecipe(this.recipeForm.value as Omit<IRecipe, 'id'>);
     }
 
     this.handleCancel();
