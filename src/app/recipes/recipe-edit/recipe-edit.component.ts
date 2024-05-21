@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -21,6 +21,10 @@ import { IRecipe } from '../../@interfaces/IRecipe';
   styleUrl: './recipe-edit.component.css',
 })
 export class RecipeEditComponent {
+  private recipesSvc = inject(RecipesService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   currentId: number;
   editMode = false;
   recipeForm = new FormGroup({
@@ -30,12 +34,6 @@ export class RecipeEditComponent {
     ingredients: new FormArray([]),
   });
   currentRecipe: IRecipe;
-
-  constructor(
-    private recipeSvc: RecipesService,
-    private router: Router,
-    private route: ActivatedRoute,
-  ) {}
 
   private newIngredientGroup(ingredient?: IIngredient) {
     return new FormGroup({
@@ -52,7 +50,7 @@ export class RecipeEditComponent {
 
     if (id) {
       this.currentId = +id;
-      this.currentRecipe = { ...this.recipeSvc.getRecipe(+id) };
+      this.currentRecipe = { ...this.recipesSvc.getRecipe(+id) };
       const { name, imagePath, description, ingredients } = this.currentRecipe;
 
       for (let ingredient of ingredients) {
@@ -73,12 +71,12 @@ export class RecipeEditComponent {
 
   handleSubmit() {
     if (this.editMode) {
-      this.recipeSvc.updateRecipe(this.currentId, {
+      this.recipesSvc.updateRecipe(this.currentId, {
         id: this.currentId,
         ...this.recipeForm.value,
       } as IRecipe);
     } else {
-      this.recipeSvc.addRecipe(this.recipeForm.value as Omit<IRecipe, 'id'>);
+      this.recipesSvc.addRecipe(this.recipeForm.value as Omit<IRecipe, 'id'>);
     }
 
     this.handleCancel();

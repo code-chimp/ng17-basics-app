@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -13,19 +13,17 @@ import { IRecipe } from '../../@interfaces/IRecipe';
   templateUrl: './recipe-list.component.html',
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
+  private recipesSvc = inject(RecipesService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
   recipes: IRecipe[] = [];
   sub: Subscription;
 
-  constructor(
-    private svc: RecipesService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {}
-
   ngOnInit(): void {
-    this.recipes = this.svc.getRecipes();
+    this.recipes = this.recipesSvc.getRecipes();
 
-    this.sub = this.svc.recipesChanged.subscribe(recipes => {
+    this.sub = this.recipesSvc.recipesChanged.subscribe(recipes => {
       this.recipes = recipes;
     });
   }

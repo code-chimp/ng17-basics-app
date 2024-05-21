@@ -8,7 +8,7 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [HeaderComponent, RouterOutlet, RecipesComponent, ShoppingListComponent],
+  imports: [RouterOutlet, HeaderComponent, RecipesComponent, ShoppingListComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent {}

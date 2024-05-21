@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { IIngredient } from '../../@interfaces/IIngredient';
 import { ShoppingListService } from '../../services/shopping-list.service';
 
 @Component({
@@ -13,6 +12,8 @@ import { ShoppingListService } from '../../services/shopping-list.service';
   styleUrl: './shopping-edit.component.css',
 })
 export class ShoppingEditComponent implements OnInit, OnDestroy {
+  private shoppingListSvc = inject(ShoppingListService);
+
   sub: Subscription;
   editIndex: number;
   editMode = false;
@@ -22,11 +23,9 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     amount: new FormControl<number>(null, [Validators.required, Validators.min(1)]),
   });
 
-  constructor(private svc: ShoppingListService) {}
-
   ngOnInit(): void {
-    this.sub = this.svc.startEditing.subscribe((index: number) => {
-      const ingredient = this.svc.getIngredient(index);
+    this.sub = this.shoppingListSvc.startEditing.subscribe((index: number) => {
+      const ingredient = this.shoppingListSvc.getIngredient(index);
 
       this.ingredientForm.setValue({
         name: ingredient.name,
@@ -45,21 +44,23 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     const { name, amount } = this.ingredientForm.value;
 
     if (this.editMode) {
-      this.svc.updateIngredient(this.editIndex, { name, amount });
+      this.shoppingListSvc.updateIngredient(this.editIndex, { name, amount });
     } else {
-      this.svc.addIngredient({ name, amount });
+      this.shoppingListSvc.addIngredient({ name, amount });
     }
 
     this.handleClearClick();
   }
 
+  /** Clears the form. */
   handleClearClick() {
     this.editMode = false;
     this.ingredientForm.reset();
   }
 
+  /** Deletes the ingredient at the current index and clears the form. */
   handleDeleteClick() {
-    this.svc.deleteIngredient(this.editIndex);
+    this.shoppingListSvc.deleteIngredient(this.editIndex);
     this.handleClearClick();
   }
 }

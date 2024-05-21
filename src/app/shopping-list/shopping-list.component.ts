@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { IIngredient } from '../@interfaces/IIngredient';
@@ -12,18 +12,20 @@ import { ShoppingListService } from '../services/shopping-list.service';
   templateUrl: './shopping-list.component.html',
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
+  private shoppingListSvc = inject(ShoppingListService);
+
   ingredients: IIngredient[] = [];
 
   private sub: Subscription;
 
-  constructor(private svc: ShoppingListService) {}
-
   ngOnInit(): void {
-    this.ingredients = this.svc.getIngredients();
+    this.ingredients = this.shoppingListSvc.getIngredients();
 
-    this.sub = this.svc.ingredientsChanged.subscribe((ingredients: IIngredient[]) => {
-      this.ingredients = ingredients;
-    });
+    this.sub = this.shoppingListSvc.ingredientsChanged.subscribe(
+      (ingredients: IIngredient[]) => {
+        this.ingredients = ingredients;
+      },
+    );
   }
 
   ngOnDestroy(): void {
@@ -31,6 +33,6 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   }
 
   handleItemClick(index: number) {
-    this.svc.startEditing.next(index);
+    this.shoppingListSvc.startEditing.next(index);
   }
 }
