@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { DropdownDirective } from '../directives/dropdown.directive';
 import { DataStorageService } from '../services/data-storage.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,8 +12,22 @@ import { DataStorageService } from '../services/data-storage.service';
   imports: [RouterLink, RouterLinkActive, DropdownDirective],
   templateUrl: './header.component.html',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private authSvc = inject(AuthService);
   private dataStorageSvc = inject(DataStorageService);
+  private userSub: Subscription;
+
+  isAuthenticated = false;
+
+  ngOnInit() {
+    this.userSub = this.authSvc.user.subscribe(user => {
+      this.isAuthenticated = !!user;
+    });
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe();
+  }
 
   handleSaveDataClick() {
     this.dataStorageSvc.storeRecipes();
@@ -19,5 +35,9 @@ export class HeaderComponent {
 
   handleFetchDataClick() {
     this.dataStorageSvc.fetchRecipes().subscribe();
+  }
+
+  handleLogoutClick() {
+    this.authSvc.signOut();
   }
 }

@@ -1,0 +1,114 @@
+<div class="row">
+  <div class="col-xs-12 col-md-6 col-md-offset-3">
+    @if (errorMessage) {
+      <div class="alert alert-danger">
+        <p>{{ errorMessage }}</p>
+      </div>
+    }
+    @if (isPending) {
+      <div class="text-center">
+        <app-loading-spinner />
+      </div>
+    } @else {
+      <form [formGroup]="authForm" (ngSubmit)="handleSubmitClick()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="form-control"
+            required
+            aria-describedby="emailFeedback"
+            formControlName="email" />
+          <div id="emailFeedback" class="help-block">
+            @if (authForm.controls.email.touched && !authForm.controls.email.valid) {
+              <p class="bg-danger text-danger">
+                @if (authForm.controls.email.hasError('required')) {
+                  Email is required
+                }
+                @if (authForm.controls.email.hasError('email')) {
+                  Email is invalid
+                }
+              </p>
+            }
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+            required
+            aria-describedby="passwordFeedback"
+            formControlName="password" />
+        </div>
+        <div id="passwordFeedback" class="help-block">
+          @if (authForm.controls.password.touched && !authForm.controls.password.valid) {
+            <p class="bg-danger text-danger">
+              @if (authForm.controls.password.hasError('required')) {
+                Password is required
+              }
+              @if (authForm.controls.password.hasError('minlength')) {
+                Password must be at least
+                {{ authForm.controls.password.errors.minlength.requiredLength }} characters
+                long
+              }
+            </p>
+          }
+        </div>
+        @if (!isLoginMode) {
+          <div class="form-group">
+            <label for="verifyPassword">Verify Password</label>
+            <input
+              type="password"
+              name="verifyPassword"
+              id="verifyPassword"
+              class="form-control"
+              required
+              aria-describedby="verifyPasswordFeedback"
+              formControlName="verifyPassword" />
+          </div>
+          <div id="verifyPasswordFeedback" class="help-block">
+            @if (
+              authForm.controls.verifyPassword.touched &&
+              (!authForm.controls.verifyPassword.valid ||
+                authForm.hasError('unmatchedPassword'))
+            ) {
+              <p class="bg-danger text-danger">
+                @if (authForm.controls.verifyPassword.hasError('required')) {
+                  You need to verify your password
+                }
+                @if (authForm.hasError('unmatchedPassword')) {
+                  The value entered does not match the password
+                }
+              </p>
+            }
+          </div>
+        }
+        <div>
+          <button type="submit" class="btn btn-primary" [disabled]="!authForm.valid">
+            {{ isLoginMode ? 'Login' : 'Sign Up' }}
+          </button>
+        </div>
+        @if (isLoginMode) {
+          <div>
+            <p>
+              Don't have an account?
+              <a (click)="handleModeSwitchClick()" role="button">Sign Up</a>
+            </p>
+          </div>
+        } @else {
+          <div>
+            <p>
+              Already have an account?
+              <a (click)="handleModeSwitchClick()" role="button">Login</a>
+            </p>
+          </div>
+        }
+      </form>
+    }
+  </div>
+</div>

@@ -1,0 +1,8 @@
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+
+p.text-danger {
+  padding: 6px 12px;
+  border-radius: 4px;
+}
