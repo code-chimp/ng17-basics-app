@@ -4,7 +4,7 @@
       <div class="navbar-header"><a routerLink="/" class="navbar-brand">Recipe Book</a></div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          @if (isAuthenticated) {
+          @if (isAuthenticated()) {
             <li routerLinkActive="active">
               <a routerLink="/recipes">Recipes</a>
             </li>
@@ -18,7 +18,7 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          @if (isAuthenticated) {
+          @if (isAuthenticated()) {
             <li>
               <a (click)="handleLogoutClick()" style="cursor: pointer" role="button">Logout</a>
             </li>

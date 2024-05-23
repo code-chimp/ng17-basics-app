@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import { DropdownDirective } from '../../directives/dropdown.directive';
@@ -17,20 +17,22 @@ export class RecipeDetailComponent {
   private shoppingSvc = inject(ShoppingListService);
   private router = inject(Router);
 
-  recipe: IRecipe | null;
-  currentId: number;
+  protected recipe = signal<IRecipe>(null);
+  protected currentId = signal<number>(null);
 
   @Input() set id(id: string) {
-    this.currentId = +id;
-    this.recipe = this.recipeSvc.getRecipe(+id);
+    this.currentId.set(+id);
+    this.recipe.set(this.recipeSvc.getRecipe(+id));
   }
 
   handleAddToShoppingList() {
-    this.shoppingSvc.addIngredients(this.recipe.ingredients);
+    this.shoppingSvc.addIngredients(this.recipe()?.ingredients ?? []);
   }
 
   handleDelete() {
-    this.recipeSvc.deleteRecipe(this.currentId);
+    if (this.currentId()) {
+      this.recipeSvc.deleteRecipe(this.currentId());
+    }
     this.router.navigate(['/recipes']);
   }
 }

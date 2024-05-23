@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -17,11 +17,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private dataStorageSvc = inject(DataStorageService);
   private userSub: Subscription;
 
-  isAuthenticated = false;
+  protected isAuthenticated = signal<boolean>(false);
 
   ngOnInit() {
     this.userSub = this.authSvc.user.subscribe(user => {
-      this.isAuthenticated = !!user;
+      this.isAuthenticated.set(!!user);
     });
   }
 

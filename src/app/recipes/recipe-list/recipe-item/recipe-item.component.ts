@@ -11,6 +11,4 @@ import { IRecipe } from '../../../@interfaces/IRecipe';
 })
 export class RecipeItemComponent {
   @Input({ required: true }) recipe!: IRecipe;
-
-  constructor() {}
 }

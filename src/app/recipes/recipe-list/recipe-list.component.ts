@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -17,19 +17,19 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  recipes: IRecipe[] = [];
-  sub: Subscription;
+  recipes = signal<IRecipe[]>([]);
+  recipesChangedSub: Subscription;
 
   ngOnInit(): void {
-    this.recipes = this.recipesSvc.getRecipes();
+    this.recipes.set(this.recipesSvc.getRecipes());
 
-    this.sub = this.recipesSvc.recipesChanged.subscribe(recipes => {
-      this.recipes = recipes;
+    this.recipesChangedSub = this.recipesSvc.recipesChanged.subscribe(recipes => {
+      this.recipes.set(recipes);
     });
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.recipesChangedSub.unsubscribe();
   }
 
   handleNewRecipeClick() {

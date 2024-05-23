@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { IIngredient } from '../@interfaces/IIngredient';
@@ -14,22 +14,22 @@ import { ShoppingListService } from '../services/shopping-list.service';
 export class ShoppingListComponent implements OnInit, OnDestroy {
   private shoppingListSvc = inject(ShoppingListService);
 
-  ingredients: IIngredient[] = [];
+  protected ingredients = signal<IIngredient[]>([]); //: IIngredient[] = [];
 
-  private sub: Subscription;
+  private ingredientsChangedSub: Subscription;
 
   ngOnInit(): void {
-    this.ingredients = this.shoppingListSvc.getIngredients();
+    this.ingredients.set(this.shoppingListSvc.getIngredients());
 
-    this.sub = this.shoppingListSvc.ingredientsChanged.subscribe(
+    this.ingredientsChangedSub = this.shoppingListSvc.ingredientsChanged.subscribe(
       (ingredients: IIngredient[]) => {
-        this.ingredients = ingredients;
+        this.ingredients.set(ingredients);
       },
     );
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.ingredientsChangedSub.unsubscribe();
   }
 
   handleItemClick(index: number) {

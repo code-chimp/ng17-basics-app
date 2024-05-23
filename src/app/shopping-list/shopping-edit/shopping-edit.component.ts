@@ -14,7 +14,7 @@ import { ShoppingListService } from '../../services/shopping-list.service';
 export class ShoppingEditComponent implements OnInit, OnDestroy {
   private shoppingListSvc = inject(ShoppingListService);
 
-  sub: Subscription;
+  startEditingSub: Subscription;
   editIndex: number;
   editMode = false;
 
@@ -24,7 +24,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.sub = this.shoppingListSvc.startEditing.subscribe((index: number) => {
+    this.startEditingSub = this.shoppingListSvc.startEditing.subscribe((index: number) => {
       const ingredient = this.shoppingListSvc.getIngredient(index);
 
       this.ingredientForm.setValue({
@@ -37,7 +37,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.startEditingSub.unsubscribe();
   }
 
   handleSubmit() {
